@@ -1,0 +1,51 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+  font-weight: 300;
+  color: #c4c3ca;
+  background-color: #14151a;
+  overflow: hidden;
+  font-family: proxima-soft, sans-serif;
+}
+
+.container {
+    position: relative;
+	  width: 100%;
+	  display: block;
+    padding-top: 140px;
+	  padding-bottom: 140px;
+}
+
+h1 {
+	color: #fff;
+	text-align: center;
+	margin-top: 4%;
+	font-size: 400%;
+}
+
+.small{
+	text-align: center;
+	font-size: 200%;
+  color: #7f6ed2;
+}
+
+li {
+	display: inline-table;
+	margin-right: 10px;
+  list-style: none;
+}
+
+a {
+	color: #c4c3ca;
+}
+
+.buttons {
+	overflow: hidden;
+	padding: 0;
+	display: table;
+	margin: 0 auto;
+	margin-top: 40px;
+}
