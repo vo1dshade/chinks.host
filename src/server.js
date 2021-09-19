@@ -13,6 +13,10 @@ const bcrypt = require('bcrypt');
 
 var { nanoid } = require("nanoid");
 
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const oneDay = 1000 * 60 * 60 * 24;
+
 
 var appDir = path.dirname(require.main.filename).toString().replace("src", "")
 var allowedExtensions = ["png", "jpg", "jpeg", "gif", "webm", "mp4", "mov"]
@@ -24,11 +28,41 @@ var mainDomain = config["maindomain"]
 
 const users = JSON.parse(fs.readFileSync(__dirname + "/data/users.json"))
 
+var swig  = require('swig');
+var cons = require('consolidate');
+app.engine('html', cons.swig)
+app.set('views', appDir + "public");
+app.set('view engine', 'html');
+
+app.use(sessions({
+    secret: "secretkey727",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+var session;
+
+app.use(cookieParser());
+
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+app.get('/',(req,res) => {
+    session=req.session;
+    if(session.userinfo){
+        res.post("/dashboard")
+    }else
+    res.sendFile(appDir + "/public/index.html")
+});
+
 app.get("/dashboard", (req, res) => {
-    res.sendFile(appDir + "/public/dashboard.html")
+  if(req.session.userinfo){
+    res.render("dashboard.html", {token:req.session.userinfo.token})
+  }
+  else{
+     res.sendFile(appDir + "/public/dashboard.html")
+  }
 })
 app.get("/invites", (req, res) => {
     console.log(invites)
@@ -89,7 +123,10 @@ app.post('/login', async (req, res) => {
     
             const passwordMatch = await bcrypt.compare(submittedPass,storedPass);
             if (passwordMatch) {
-                res.sendFile(appDir + "/public/dashboard.html");
+              session=req.session;
+              session.userinfo= foundUser;
+              console.log(req.session)
+              res.render("dashboard.html", {token:req.session.userinfo.token})
             } else {
                 res.send("<div align ='center'><h2>Invalid username or password</h2></div><br><br><div align ='center'><a href='./login.html'>login again</a></div>");
             }
@@ -106,6 +143,10 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
 
 app.get("/:file", (req, res) => {

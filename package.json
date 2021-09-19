@@ -12,7 +12,10 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "consolidate": "^0.16.0",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "filesize": "^6.3.0",
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
@@ -22,6 +25,7 @@
     "path": "^0.12.7",
     "randomcolor": "^0.6.2",
     "randomstring": "^1.2.1",
-    "serve-index": "^1.9.1"
+    "serve-index": "^1.9.1",
+    "swig": "^1.4.2"
   }
 }
